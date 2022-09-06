@@ -25,7 +25,7 @@ print(linear_model.accuracy()) # will print the accuracy computed using adjusted
 
 
 ```python
-### should the user desires to build the model using regularization
+# should the user desires to build the model using regularization
 
 linear_model.buildLasso()                # or linear_model.buildRidge() or linear_model.buildElasticNet()
 print(linear_model.accuracy(mode="L1"))  # or mode="L2" or mode="Elastic"
