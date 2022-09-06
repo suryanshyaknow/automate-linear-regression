@@ -8,7 +8,7 @@
 
 - ### User will also have the flexibility of building the model with regularization modes viz. `Lasso (L1`, `Ridge (L2)` and `ElasticNet` and to compare their accuracies accordingly.
 
-# An Example of How to Use: 
+## An Example of How to Use: 
 
 ```python
 from automateLinearRegression import automate
