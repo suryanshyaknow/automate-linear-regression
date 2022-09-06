@@ -11,18 +11,7 @@ import pickle
 import logging as lg
 
 class LinReg:
-    """
-    This is a class specific to build a Linear Regeression model on the dataset passed as the parameter with its features as well
-    as label to be regressed against. And as such it is assumed that the analysis and the feature enigineering is already done on
-    on the dataset that is to say all desired conversions are made on the features before passing them as parameters.
     
-    This class will also standardizes the data via StandardScaler() so that all features can be on the same scale and goes without 
-    saying that the model optimization could increase.
-
-    This class also gives user the flexibility of building the model with regularization modes viz. Lasso (L1), Ridge (L2)
-    and ElasticNet.
-    """
-
     def __init__(self, dataframe, features, label, logging=True):
         
         # Should the user wants to record the logs in the console as well as in the separate .log file
