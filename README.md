@@ -4,7 +4,7 @@
     
 - ### This package will standardize the data via StandardScaler() so that all features can be on the same scale and obviously so that the model optimization could increase.
 
-- ### Accuracy of the model built by this pacakage is computed using `adjusted R-squared`.
+- ### Accuracy of the model built by this package is computed using `adjusted R-squared`.
 
 - ### User will also have the flexibility of building the model with regularization modes viz. `Lasso (L1`, `Ridge (L2)` and `ElasticNet` and to compare their accuracies accordingly.
 
@@ -24,7 +24,7 @@ print(linear_model.accuracy()) # will print the accuracy computed using adjusted
 
 
 ```python
-### if the user desiresw to build the model using regularization
+### should the user desires to build the model using regularization
 
 linear_model.buildLasso()                # or linear_model.buildRidge or linear_model.buildElasticNet
 print(linear_model.accuracy(mode="L1"))  # or mode="L2" or mode="Elastic"
