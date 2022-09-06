@@ -11,7 +11,7 @@
 ## An Example of How to Use: 
 
 ```python
-from automateLinRegression import automate_linReg
+from automate_LinearRegression import automate_linReg
 
 df        # the dataset you want to build the model of
 features  # df's features
