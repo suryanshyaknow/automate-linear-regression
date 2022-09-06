@@ -11,7 +11,7 @@ import pickle
 import logging as lg
 
 class LinReg:
-    
+
     def __init__(self, dataframe, features, label, logging=True):
         
         # Should the user wants to record the logs in the console as well as in the separate .log file
@@ -215,8 +215,8 @@ class LinReg:
         """
         A method specific to yield prediction results.
 
-        Before pasing the test record(s) into model to predict the outcome we have to standardize the test record(s) too, as whatever we made 
-        happen to the test data, the same's gotta be done for the test record(s) to yield accurate prediction outcome.
+        Before pasing the test record(s) into the model for prediction, this method will standardize the test record(s) too, as whatever's 
+        happened to the train and the test data, the same's gotta be done for the test record(s) to yield accurate prediction outcome.
         """
         try:
             # conversion of input passed into array (if not already) and reshaping it to be fed into StandardScaler()
