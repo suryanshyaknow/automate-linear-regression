@@ -1,22 +1,28 @@
 from setuptools import setup, find_packages
+import codecs
+import os
 
+here = os.path.abspath(os.path.dirname(__file__))
+
+with codecs.open(os.path.join(here, "README.md"), encoding="utf-8") as fh:
+    long_description = "\n" + fh.read()
 
 VERSION = '0.0.1'
-DESCRIPTION = 'Automate Linear Regression'
-LONG_DESCRIPTION = 'A package that allows to build a Linear Regression Machine Learning model provided that the user has already surmised that the data the user has been working on follows a linear relationship. In addition regularization techniques can be implemented with the help of this package.'
+DESCRIPTION = 'Linear Regression Automation'
 
 # Setting up
 setup(
-    name="vidstream",
+    name="automate-linear-regression",
     version=VERSION,
-    author="Suryansh Grover",
+    author="Suryansh",
     author_email="<suryanshgrover1999@gmail.com>",
     description=DESCRIPTION,
     long_description_content_type="text/markdown",
-    long_description=LONG_DESCRIPTION,
+    long_description=long_description,
     packages=find_packages(),
-    install_requires=['scikit-learn', 'pandas', 'numpy', 'pickle'],
-    keywords=['python', 'machine learning', 'machine learning model', 'regression', 'linear regression', 'lasso linear regression', 'elasticnet linear regression', 'regularization'],
+    install_requires=['scikit-learn', 'numpy', 'pickle'],
+    keywords=['python', 'machine learning', 'machine learning model', 'regression',
+              'linear regression', 'lasso linear regression', 'elasticnet linear regression', 'regularization'],
     classifiers=[
         "Development Status :: 1 - Planning",
         "Intended Audience :: Developers",
