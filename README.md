@@ -1,4 +1,4 @@
-# automate-linear-regression
+# automate_LinearRegression
 
 - ### This package is specific to build a Linear Regeression model on the dataset passed as the parameter with its features as well as label to be regressed against. And as such, it is presumed that the analysis and the feature engineering has already been done on the dataset.
     
@@ -11,13 +11,13 @@
 ## An Example of How to Use: 
 
 ```python
-from automateLinearRegression import automate
+from automateLinRegression import automate_linReg
 
 df        # the dataset you want to build the model of
 features  # df's features
 label     # df's label
 
-linear_model = automate(df, features, label)
+linear_model = automate_linReg(df, features, label)
 linear_model.split(testSize = 0.15) # first and foremost step is to split the features and label into train and test subdata
 linear_model.build()
 print(linear_model.accuracy()) # will print the accuracy computed using adjusted R-squared

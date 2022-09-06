@@ -11,7 +11,7 @@ import pickle
 import logging as lg
 
 
-class LinReg:
+class automate_linReg:
     """
     A class used to build a Linear Regeression model on the dataset passed as the parameter with its features as well as
     label to be regressed against. And as such, it is presumed that the analysis and the feature engineering has already 
@@ -146,7 +146,7 @@ class LinReg:
             return self._scaler.fit_transform(data)
 
         except Exception as e:
-            lg.error("LinReg._standardize()", e)
+            lg.error("automate_linReg._standardize()", e)
             print(e)
 
     def _standardize_features(self):
@@ -157,7 +157,7 @@ class LinReg:
             self._X = self._standardize(self.features)
 
         except Exception as e:
-            lg.error("LinReg._features()", e)
+            lg.error("automate_linReg._features()", e)
             print(e)
 
     def split(self, testSize=0.25):
@@ -179,7 +179,7 @@ class LinReg:
                 self._X, self._Y, test_size=testSize, random_state=100)
 
         except Exception as e:
-            lg.error("LinReg.split()", e)
+            lg.error("automate_linReg.split()", e)
             print(e)
 
         else:
@@ -190,14 +190,14 @@ class LinReg:
         A method specific to build the Linear Regression model (without any regularization techniques).
         """
         try:
-            self.l_Model = LinearRegression()
+            self._lModel = LinearRegression()
 
             lg.info("readying the model...")
             self._lModel.fit(self.X_train, self.Y_train)
             lg.info("Model executed succesfully!")
 
         except Exception as e:
-            lg.error("LinReg.build()", e)
+            lg.error("automate_linReg.build()", e)
             print(e)
 
     def buildLasso(self):
@@ -215,7 +215,7 @@ class LinReg:
             lg.info("L1 Model executed!")
 
         except Exception as e:
-            lg.error("LinReg.buildLAsso()", e)
+            lg.error("automate_linReg.buildLAsso()", e)
             print(e)
 
     def buildRidge(self):
@@ -228,12 +228,12 @@ class LinReg:
             ridgecv.fit(self.X_train, self.Y_train)
 
             lg.info("readying the L2 Model...")
-            self.l2Model = Ridge(ridgecv.alpha_)
-            self.l2Model.fit(self.X_train, self.Y_train)
+            self._l2Model = Ridge(ridgecv.alpha_)
+            self._l2Model.fit(self.X_train, self.Y_train)
             lg.info("L2 Model executed!")
 
         except Exception as e:
-            lg.error("LinReg.buildRidge()", e)
+            lg.error("automate_linReg.buildRidge()", e)
             print(e)
 
     def buildElasticNet(self):
@@ -251,7 +251,7 @@ class LinReg:
             lg.info("ElasticNet Model executed!")
 
         except Exception as e:
-            lg.error("LinReg.buildElasticNet()", e)
+            lg.error("automate_linReg.buildElasticNet()", e)
             print(e)
 
     def accuracy(self, mode='Regression'):
@@ -272,7 +272,7 @@ class LinReg:
                 r_sq = self._l1Model.score(self.X_test, self.Y_test) * 100
 
             elif mode == 'L2':
-                r_sq = self.l2Model.score(self.X_test, self.Y_test) * 100
+                r_sq = self._l2Model.score(self.X_test, self.Y_test) * 100
 
             else:
                 r_sq = self._lModel.score(self.X_test, self.Y_test) * 100
@@ -286,7 +286,7 @@ class LinReg:
             return round(adj_rsquared, 3)
 
         except Exception as e:
-            lg.error("LinReg.accuracy()", e)
+            lg.error("automate_linReg.accuracy()", e)
             print(e)
 
     def predict(self, test_array, mode="Regression"):
@@ -316,17 +316,17 @@ class LinReg:
             if mode == "L1":
                 return self._l1Model.predict(std_test_array)
             elif mode == "L2":
-                return self.l2Model.predict(std_test_array)
+                return self._l2Model.predict(std_test_array)
             elif mode == "Elastic":
                 return self._elasticModel.predict(std_test_array)
             else:
-                return self._lModel.predict(std_test_array)
+                return self._lModel.predict(std_test_array)[0][0]
 
         except Exception as e:
-            lg.error("LinReg.predict()", e)
+            lg.error("automate_linReg.predict()", e)
             print(e)
 
-    def save(self, mode="Regression"):
+    def save(self, mode="Regression", fileName="RegModel"):
         """
         The method to save the model locally.
 
@@ -334,20 +334,22 @@ class LinReg:
         ----------
         mode : str, default="Regression"
             decides what type of the model is to be saved locally.
+        filename : str, default = "LinModel"
+            the name of the model to be saved.
         """
         try:
             if mode == "ElasticNet":
-                pickle.dump(self._elasticModel, open(f"{self.df}", 'wb'))
+                pickle.dump(self._elasticModel, open(f"{fileName}__elasticNet.sav", 'wb'))
             elif mode == "L1":
-                pickle.dump(self._l1Model, open(f"{self.df}__lasso.sav", 'wb'))
+                pickle.dump(self._l1Model, open(f"{fileName}__lasso.sav", 'wb'))
             elif mode == "L2":
-                pickle.dump(self.l2Model, open(f"{self.df}__ridge.sav", 'wb'))
+                pickle.dump(self._l2Model, open(f"{fileName}__ridge.sav", 'wb'))
             else:
-                pickle.dump(self.l_Model, open(
-                    f"{self.df}__elasticnet.sav", 'wb'))
+                pickle.dump(self._lModel, open(
+                    f"{fileName}.sav", 'wb'))
 
             lg.info(f"The {mode} model is saved at {os.getcwd()} sucessfully!")
 
         except Exception as e:
-            lg.error("LinReg.save()", e)
+            lg.error("automate_linReg.save()", e)
             print(e)

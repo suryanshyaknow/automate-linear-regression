@@ -8,11 +8,11 @@ with codecs.open(os.path.join(here, "README.md"), encoding="utf-8") as fh:
     long_description = "\n" + fh.read()
 
 VERSION = '0.0.1'
-DESCRIPTION = 'Linear Regression Automation'
+DESCRIPTION = 'Linear-Regression-Automation'
 
 # Setting up
 setup(
-    name="automate-linear-regression",
+    name="automate_LinearRegression",
     version=VERSION,
     author="Suryansh",
     author_email="<suryanshgrover1999@gmail.com>",
@@ -20,7 +20,7 @@ setup(
     long_description_content_type="text/markdown",
     long_description=long_description,
     packages=find_packages(),
-    install_requires=['scikit-learn', 'numpy', 'pickle'],
+    install_requires=['scikit-learn', 'numpy'],
     keywords=['python', 'machine learning', 'machine learning model', 'regression',
               'linear regression', 'lasso linear regression', 'elasticnet linear regression', 'regularization'],
     classifiers=[
