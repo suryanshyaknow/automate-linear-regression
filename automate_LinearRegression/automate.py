@@ -67,7 +67,7 @@ class automate_linReg:
         Parameters
         ----------
         dataframe : pandas.DataFrame
-            datset on which model is to be built.
+            dataset on which model is to be built.
         features : pandas.DataFrame
             features of the dataframe passed as the parameter.
         label : pandas.DataFrame
@@ -147,7 +147,6 @@ class automate_linReg:
 
         except Exception as e:
             lg.error("automate_linReg._standardize()", e)
-            print(e)
 
     def _standardize_features(self):
         """
@@ -158,7 +157,6 @@ class automate_linReg:
 
         except Exception as e:
             lg.error("automate_linReg._features()", e)
-            print(e)
 
     def split(self, testSize=0.25):
         """
@@ -180,7 +178,6 @@ class automate_linReg:
 
         except Exception as e:
             lg.error("automate_linReg.split()", e)
-            print(e)
 
         else:
             lg.info("data split is done successfully!")
@@ -198,7 +195,6 @@ class automate_linReg:
 
         except Exception as e:
             lg.error("automate_linReg.build()", e)
-            print(e)
 
     def buildLasso(self):
         """
@@ -216,7 +212,6 @@ class automate_linReg:
 
         except Exception as e:
             lg.error("automate_linReg.buildLAsso()", e)
-            print(e)
 
     def buildRidge(self):
         """
@@ -234,7 +229,6 @@ class automate_linReg:
 
         except Exception as e:
             lg.error("automate_linReg.buildRidge()", e)
-            print(e)
 
     def buildElasticNet(self):
         """
@@ -252,7 +246,6 @@ class automate_linReg:
 
         except Exception as e:
             lg.error("automate_linReg.buildElasticNet()", e)
-            print(e)
 
     def accuracy(self, mode='Regression'):
         """
@@ -287,7 +280,6 @@ class automate_linReg:
 
         except Exception as e:
             lg.error("automate_linReg.accuracy()", e)
-            print(e)
 
     def predict(self, test_array, mode="Regression"):
         """
@@ -324,7 +316,6 @@ class automate_linReg:
 
         except Exception as e:
             lg.error("automate_linReg.predict()", e)
-            print(e)
 
     def save(self, mode="Regression", fileName="RegModel"):
         """
@@ -352,4 +343,3 @@ class automate_linReg:
 
         except Exception as e:
             lg.error("automate_linReg.save()", e)
-            print(e)
