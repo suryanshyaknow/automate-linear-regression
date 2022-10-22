@@ -1,3 +1,4 @@
+from cgi import test
 import numpy as np
 import logging as lg
 import os
@@ -37,8 +38,9 @@ class automate_linReg:
 
     Methods
     -------
-    split(testSize=0.25)
-        splits the features and label into based on the size of testSize passed as a parameter.
+    split(testSize=0.25, random_state=None)
+        splits the features and label into based on the size of testSize passed as a parameter and selects a 
+        distribution of the sets based on the 'random-state'.
 
     build()
         builds the linear regression model.
@@ -52,8 +54,10 @@ class automate_linReg:
     buildElasticNet()
         builds the linear regression model with ElasticNet (L3) regularization technique.
 
-    accuracy(mode="Regression")
-        returns the accuracy computed by the adjusted R-squared of the model built based on the regularization type.
+    accuracy(mode="Regression", metric="r-squared", test_score=True)
+        returns the accuracy computed by the 'R-squared' score or 'adjusted R-squared' score of the model built 
+        based on the regularization type.
+        If test_score = True then returns the test scores, else returns the training scores.
 
     predict(test_array, mode="Regression")
         returns the prediction outcome of the record or array passed as the parameter.
@@ -158,15 +162,17 @@ class automate_linReg:
         except Exception as e:
             lg.error("automate_linReg._features()", e)
 
-    def split(self, testSize=0.25):
+    def split(self, testSize=0.25, random_state=None):
         """
-        This method splits the data into Test and Train sub-parts based on the test size passed by the user.
+        This method splits the data into Test and Train sub-parts based on the test size passed by the user
+        and and selects a distribution of the sets based on the 'random-state'.
 
         Parameters
         ----------
         testSize : float, default=0.35
             size of the test size to be casted aside for the testing purposes and for computing the accuracy of the model
             to be built.
+        random_state : int, default=None
         """
         try:
             # First and foremost features are to be standardize()
@@ -174,7 +180,7 @@ class automate_linReg:
 
             # now, splitting the features and label into train and test sub-data
             self.X_train, self.X_test, self.Y_train, self.Y_test = train_test_split(
-                self._X, self._Y, test_size=testSize, random_state=100)
+                self._X, self._Y, test_size=testSize, random_state=random_state)
 
         except Exception as e:
             lg.error("automate_linReg.split()", e)
@@ -247,36 +253,74 @@ class automate_linReg:
         except Exception as e:
             lg.error("automate_linReg.buildElasticNet()", e)
 
-    def accuracy(self, mode='Regression'):
+    def accuracy(self, mode='Regression', metric='r-squared', test_score=True):
         """
-        This method computes the accuracy of the built model using the `Adjusted R-squared`.
+        returns the accuracy computed by the 'R-squared' score or 'adjusted R-squared' score of the model built 
+        based on the regularization type.
+        If test_score = True then returns the test scores, else returns the training scores.
 
         Parameters
         ----------
         mode : str, default="Regression"
-            regularization techniques viz. "L1" for LASSO, "L2" for Ridge, "Elastic" for ElasticNet and default="Regression"
-            for no regularization.
+            regularization techniques viz. "L1" for LASSO, "L2" for Ridge, "Elastic" for ElasticNet and 
+            default="Regression" for no regularization.
+        metric : str, default="r-squared"
+            accuracy metric viz. "r-squared" for accuracy to be computed using r-squared score and 
+            "adjusted r-squared" for accuracy to be computed using adjusted r-squared score.
+
+            adjusted r-squared = 1 - (1 - r_sq)*(n-1)/(n-p-1)
+
+            where n = number of rows,
+                  p = number of predictors
+        test_score : bool, default=True
+            If test_score = True then returns then returns the test scores, else returns training score.
         """
         try:
             if mode == 'Elastic':
-                r_sq = self._elasticModel.score(self.X_test, self.Y_test) * 100
+                if test_score:
+                    r_squared = self._elasticModel.score(
+                        self.X_test, self.Y_test)
+                else:
+                    r_squared = self._elasticModel.score(
+                        self.X_train, self.Y_train)
 
             elif mode == 'L1':
-                r_sq = self._l1Model.score(self.X_test, self.Y_test) * 100
+                if test_score:
+                    r_squared = self._l1Model.score(
+                        self.X_test, self.Y_test)
+                else:
+                    r_squared = self._l1Model.score(
+                        self.X_train, self.Y_train)
 
             elif mode == 'L2':
-                r_sq = self._l2Model.score(self.X_test, self.Y_test) * 100
+                if test_score:
+                    r_squared = self._l2Model.score(
+                        self.X_test, self.Y_test)
+                else:
+                    r_squared = self._l2Model.score(
+                        self.X_train, self.Y_train)
 
             else:
-                r_sq = self._lModel.score(self.X_test, self.Y_test) * 100
+                if test_score:
+                    r_squared = self._lModel.score(
+                        self.X_test, self.Y_test)
+                else:
+                    r_squared = self._lModel.score(
+                        self.X_train, self.Y_train)
 
-            n = self.X_test.shape[0]               # number of rows
-            p = self.X_test.shape[1]               # number of predictors
-            adj_rsquared = 1-(1 - r_sq)*(n-1)/(n-p-1)  # adjusted r-squared
+            n = self.X_test.shape[0]  # number of rows
+            p = self.X_test.shape[1]  # number of predictors
+            adj_rsquared = 1-(1 - r_squared)*(n-1) / \
+                (n-p-1)  # adjusted r-squared
 
-            lg.info(
-                f"The {mode} model appears to be {adj_rsquared}% accurate.")
-            return round(adj_rsquared, 3)
+            if metric == 'adjusted r-squared':
+                lg.info(
+                    f"The {mode} model appears to be {adj_rsquared*100}% accurate.")
+                return round(adj_rsquared, 3)
+            else:
+                lg.info(
+                    f"The {mode} model appears to be {r_squared*100}% accurate.")
+                return round(r_squared, 3)
 
         except Exception as e:
             lg.error("automate_linReg.accuracy()", e)
@@ -330,11 +374,14 @@ class automate_linReg:
         """
         try:
             if mode == "ElasticNet":
-                pickle.dump(self._elasticModel, open(f"{fileName}__elasticNet.sav", 'wb'))
+                pickle.dump(self._elasticModel, open(
+                    f"{fileName}__elasticNet.sav", 'wb'))
             elif mode == "L1":
-                pickle.dump(self._l1Model, open(f"{fileName}__lasso.sav", 'wb'))
+                pickle.dump(self._l1Model, open(
+                    f"{fileName}__lasso.sav", 'wb'))
             elif mode == "L2":
-                pickle.dump(self._l2Model, open(f"{fileName}__ridge.sav", 'wb'))
+                pickle.dump(self._l2Model, open(
+                    f"{fileName}__ridge.sav", 'wb'))
             else:
                 pickle.dump(self._lModel, open(
                     f"{fileName}.sav", 'wb'))
